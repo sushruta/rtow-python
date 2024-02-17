@@ -1,0 +1,54 @@
+[tool.poetry]
+name = "rtow-python"
+version = "0.1.0"
+description = "raytracing in a weekend but in python"
+authors = ["Sashidhar Guntury <sguntury@gmail.com>"]
+readme = "README.md"
+packages = [{include = "main"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+tqdm = "^4.66.1"
+pytest = "^8.0.0"
+black = "^24.1.1"
+mypy = "^1.8.0"
+ruff = "^0.2.0"
+pyyaml = "^6.0.1"
+pytest-factoryboy = "^2.6.0"
+types-tqdm = "^4.66.0.20240106"
+pillow = "^10.2.0"
+types-pillow = "^10.2.0.20240213"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+simple-image = "main.app:create_simple_image"
+
+[tool.mypy]
+packages = "src, main, tests"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/stubs"
+check_untyped_defs = "True"
+disallow_any_unimported = "True"
+no_implicit_optional = "True"
+show_error_codes = "True"
+warn_redundant_casts = "True"
+warn_return_any = "True"
+warn_unused_ignores = "True"
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+lint.select = ["D", "E", "F", "T", "PT", "UP", "I001", "RET"]
+line-length = 100
+target-version = "py312"
+extend-exclude = [
+    "stubs",
+]
+lint.extend-ignore = ["D10"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
