@@ -1,6 +1,6 @@
 import dataclasses
 
-from src.math.vector3 import Vector3
+from src.math import Vector3
 from src.types import Point3
 
 

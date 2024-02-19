@@ -161,3 +161,7 @@ cython_debug/
 
 # various caches
 .*_cache
+
+# no ppm files are stored
+*.ppm
+*/*/*.ppm
