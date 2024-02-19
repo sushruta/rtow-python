@@ -1,5 +1,4 @@
-from src.math.vector3 import Vector3
-from src.math.vector4 import Vector4
+from src.math import Vector3, Vector4
 
 type Point3 = Vector3  # type: ignore
 

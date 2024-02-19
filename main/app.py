@@ -1,7 +1,9 @@
 from tqdm import tqdm
 
 from src.camera import SimpleCamera
-from src.math.vector4 import Vector4
+from src.geometry import Sphere, World
+from src.material import shade_normal_direction, shade_sky_gradient
+from src.math import Vector3, Vector4
 from src.types import Color
 
 
@@ -25,6 +27,12 @@ def create_simple_image():
 
     camera = SimpleCamera(aspect_ratio, image_width)
 
+    sphere = Sphere(Vector3(0, 0, -1), 0.5)
+    sphere.material_fn = shade_normal_direction
+
+    world = World([sphere])
+    world.material_fn = shade_sky_gradient
+
     with open("out.ppm", "w") as flw:
         flw.write(f"P3\n{image_width} {image_height}\n255\n")
 
@@ -32,12 +40,12 @@ def create_simple_image():
             for w in range(image_width):
                 ray = camera.generate_ray(w, h)
 
-                unit_direction = ray.direction.unit()
-                factor = 0.5 * (unit_direction.y + 1.0)
+                color = Vector4(1, 1, 1, 1)
 
-                r = 1.0 - 0.5 * factor
-                g = 1.0 - 0.3 * factor
-                b = 1.0
+                current_hit = world.intersect(ray)
+                if current_hit and current_hit.material_fn:
+                    color = current_hit.material_fn(hit=current_hit)
+                else:
+                    color = world.material_fn(ray=ray)
 
-                color = Vector4(r, g, b, 1.0)
                 write_color(color, flw)

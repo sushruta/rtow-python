@@ -1,7 +1,7 @@
 import math
 from typing import Protocol
 
-from src.math.vector3 import Vector3
+from src.math import Vector3
 from src.ray import Ray
 from src.types import Point3
 

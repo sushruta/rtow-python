@@ -1,6 +1,7 @@
 import dataclasses
+from collections.abc import Callable
 
-from src.math.vector3 import Vector3
+from src.math import Vector3
 from src.ray import Ray
 from src.types import Point3
 
@@ -9,8 +10,8 @@ from src.types import Point3
 class Hit:
     ray: Ray
     t: float
-    material: str | None = None
     normal: Vector3 | None = None
+    material_fn: Callable | None = None
 
     @property
     def point(self) -> Point3:
