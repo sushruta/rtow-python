@@ -165,3 +165,8 @@ cython_debug/
 # no ppm files are stored
 *.ppm
 */*/*.ppm
+
+# no IDE files and folders
+.vscode/
+.idea/
+*.conda/

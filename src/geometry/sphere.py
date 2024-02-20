@@ -2,6 +2,7 @@ import math
 from collections.abc import Callable
 
 from src.hit import Hit
+from src.material import Material
 from src.math.vector3 import Vector3
 from src.ray import Ray
 
@@ -26,10 +27,10 @@ def get_closest_hit(h1: Hit | None, h2: Hit | None) -> Hit | None:
 
 
 class Sphere:
-    def __init__(self, center: Vector3, radius: float, material_fn: Callable | None = None):
+    def __init__(self, center: Vector3, radius: float, material: Material | None = None):
         self.center = center
         self.radius = radius
-        self.material_fn = material_fn
+        self.material = material
 
     def intersect(self, ray: Ray, hit: Hit | None = None) -> Hit | None:
         oc = ray.origin - self.center
@@ -50,5 +51,6 @@ class Sphere:
         if not final_hit:
             return None
         final_hit.normal = (ray.at(final_hit.t) - self.center).unit()
-        final_hit.material_fn = self.material_fn
+        assert self.material
+        final_hit.material_fn = self.material.shade
         return final_hit
