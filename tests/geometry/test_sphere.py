@@ -4,6 +4,8 @@ from src.camera import SimpleCamera
 from src.geometry.sphere import Sphere
 from src.math.vector3 import Vector3
 
+from src.material import NormalDirectionMaterial
+
 
 def test_simple_red_sphere():
     aspect_ratio = 16.0 / 9.0
@@ -19,7 +21,8 @@ def test_simple_red_sphere():
 
     sc = SimpleCamera(aspect_ratio, image_width)
 
-    sphere = Sphere(Vector3(0, 0, -1), 0.5)
+    normal_material = NormalDirectionMaterial()
+    sphere = Sphere(Vector3(0, 0, -1), 0.5, normal_material)
 
     ## do a pixel wise comparison of the actual
     ## and the expected image
@@ -27,7 +30,7 @@ def test_simple_red_sphere():
         for w in range(image_width):
             ray = sc.generate_ray(w, h)
 
-            hit = sphere.intersect(ray)
+            hit = sphere.intersect(ray, None)
             unit_direction = ray.direction.unit()
             f = 0.5 * (unit_direction.y + 1.0)
             ar = int(255.999 * (1.0 - 0.5 * f))

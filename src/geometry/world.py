@@ -11,7 +11,8 @@ class World:
         self.primitives = primitives
         self.material = material
 
-    def intersect(self, ray: Ray, hit: Hit | None = None) -> Hit | None:
+    def intersect(self, ray: Ray, hit: Hit | None) -> Hit | None:
         for primitive in self.primitives:
-            hit = primitive.intersect(ray, hit)
+            if new_hit := primitive.intersect(ray, hit):
+                hit = new_hit
         return hit

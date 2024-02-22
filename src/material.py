@@ -6,12 +6,13 @@ from src.types import Color
 
 
 class Material(Protocol):
-    def shade(self, **kwargs) -> Color: ...
+    def shade(self, **kwargs) -> Color:
+        ...
 
 
 class ConstantColorMaterial:
     def shade(self, **kwargs) -> Color:
-        if "hit" in kwargs and kwargs["hit"].normal:
+        if "hit" in kwargs:
             raise KeyError("hit defined with a valid normal. This is unexpected!")
         return Vector4(1, 0, 0, 1)
 
