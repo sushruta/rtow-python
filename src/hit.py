@@ -10,8 +10,8 @@ from src.types import Point3
 class Hit:
     ray: Ray
     t: float
-    normal: Vector3 | None = None
     material_fn: Callable | None = None
+    normal: Vector3 | None = None
 
     @property
     def point(self) -> Point3:

@@ -7,7 +7,8 @@ from src.types import Point3
 
 
 class Camera(Protocol):
-    def generate_ray(self, x: float, y: float) -> Ray: ...
+    def generate_ray(self, x: float, y: float) -> Ray:
+        ...
 
 
 # Following assumptions are made -

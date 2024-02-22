@@ -33,14 +33,10 @@ def create_simple_image():
     normal_material = NormalDirectionMaterial()
     sky_material = SkyGradientMaterial()
 
-    sphere1 = Sphere(Vector3(0, 0, -1), 0.5)
-    sphere1.material = normal_material
+    sphere1 = Sphere(Vector3(0, 0, -1), 0.5, normal_material)
+    sphere2 = Sphere(Vector3(0, -100.5, -1), 100, normal_material)
 
-    sphere2 = Sphere(Vector3(0, -100.5, -1), 100)
-    sphere2.material = normal_material
-
-    # world = World([sphere1, sphere2])
-    world = World([sphere1, sphere2])
+    world = World([sphere2, sphere1])
     world.material = sky_material
 
     with open("out.ppm", "w") as flw:
@@ -52,7 +48,7 @@ def create_simple_image():
 
                 color = Vector4(1, 1, 1, 1)
 
-                current_hit = world.intersect(ray)
+                current_hit = world.intersect(ray, None)
                 if current_hit:
                     assert current_hit.material_fn
                     color = current_hit.material_fn(normal=current_hit.normal)
