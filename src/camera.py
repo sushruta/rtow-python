@@ -1,4 +1,5 @@
 import math
+import random
 from typing import Protocol
 
 from src.math import Vector3
@@ -7,8 +8,7 @@ from src.types import Point3
 
 
 class Camera(Protocol):
-    def generate_ray(self, x: float, y: float) -> Ray:
-        ...
+    def generate_ray(self, x: float, y: float) -> Ray: ...
 
 
 # Following assumptions are made -
@@ -38,7 +38,13 @@ class SimpleCamera:
         )
         self.pixel_00 = viewport_upper_left + 0.5 * self.pixel_delta_u + 0.5 * self.pixel_delta_v
 
+    def pixel_sample_square(self) -> Vector3:
+        px = -0.5 + random.random()
+        py = -0.5 + random.random()
+        return px * self.pixel_delta_u + py * self.pixel_delta_v
+
     def generate_ray(self, x: int, y: int) -> Ray:
         pixel_center = self.pixel_00 + (x * self.pixel_delta_u) + (y * self.pixel_delta_v)
-        direction = pixel_center - self.camera_center
+        pixel_sample = pixel_center + self.pixel_sample_square()
+        direction = pixel_sample - self.camera_center
         return Ray(self.camera_center, direction)

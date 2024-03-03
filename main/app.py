@@ -1,4 +1,4 @@
-from tqdm import tqdm
+from rich.progress import track
 
 from src.camera import SimpleCamera
 from src.geometry import Sphere, World
@@ -28,6 +28,8 @@ def create_simple_image():
     image_width = 400
     image_height = int(image_width / aspect_ratio)
 
+    num_samples_per_pixel = 24
+
     camera = SimpleCamera(aspect_ratio, image_width)
 
     normal_material = NormalDirectionMaterial()
@@ -42,18 +44,20 @@ def create_simple_image():
     with open("out.ppm", "w") as flw:
         flw.write(f"P3\n{image_width} {image_height}\n255\n")
 
-        for h in tqdm(range(image_height)):
+        for h in track(range(image_height), description="Rendering ..."):
             for w in range(image_width):
-                ray = camera.generate_ray(w, h)
+                color = Vector4(0, 0, 0, 1.0)
+                for _ in range(num_samples_per_pixel):
+                    ray = camera.generate_ray(w, h)
 
-                color = Vector4(1, 1, 1, 1)
+                    current_hit = world.intersect(ray, None)
+                    if current_hit:
+                        assert current_hit.material_fn
+                        color += current_hit.material_fn(normal=current_hit.normal)
+                    else:
+                        assert world.material
+                        color += world.material.shade(ray=ray)
 
-                current_hit = world.intersect(ray, None)
-                if current_hit:
-                    assert current_hit.material_fn
-                    color = current_hit.material_fn(normal=current_hit.normal)
-                else:
-                    assert world.material
-                    color = world.material.shade(ray=ray)
-
+                color = color / num_samples_per_pixel
+                color.w = 1.0
                 write_color(color, flw)
